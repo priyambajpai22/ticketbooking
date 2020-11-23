@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+</head>
+<body>
+
+<form method="post">
+	<div class="input">
+	<input type="email" name="email">
+</div>
+	<div class="input">
+	<input type="password" name="password">
+</div>
+<button type="submit">Login</button>
+{% if data %}
+{{data.error}}
+{% endif %}
+<form>
+	<a href="{{ url_for('signup') }}">do not have account click here</a>
+</body>
+</html>

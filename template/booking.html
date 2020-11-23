@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>booking</title>
+	<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+	var idvalue=null
+function clicked(e){
+	$('#seat').val(e.target.value)
+	$('#myModal').modal('show');
+	idvalue=e.target.value
+	console.log(e.target.value)
+
+
+}
+function confirm(){
+	console.log(idvalue)
+			$.ajax({
+  type: "POST",
+  url: "http://127.0.0.1:5000/booking",
+  data:{'id':idvalue},
+  
+  success: function(data){
+     console.log(data)
+     if ('unbook' in data){
+     	let elements=$(`#${idvalue}`).parent()
+     	console.log(elements)
+     	elements.addClass('p-2 bg-info');
+     	elements.removeClass('p-2 bg-warning');
+     	alert(data['unbook'])
+
+     }
+     if ('error' in data){
+     	alert(data['error'])
+     }
+
+     else{
+     	let elements=$(`#${idvalue}`).parent()
+     	console.log(elements)
+     	elements.addClass('p-2 bg-warning');
+     	elements.removeClass('p-2 bg-info');
+
+     	alert('your seat has been booked')
+     }
+     idvalue=null
+  }
+});
+}
+
+</script>
+</head>
+<body>
+	<a href="{{ url_for('logout') }}">click here to logout</a>
+<div class="d-inline-flex p-3 bg-secondary text-white">
+	{% for data in data %}
+	{% if data.booked %}
+	<div class="p-2 bg-warning" ><button value={{data.id}} id={{data.id}} onclick="clicked(event)" class="button" >booked sent no. {{data.id}} {{data.booked}}</button></div>
+	{% else %}
+	<div class="p-2 bg-info" ><button value={{data.id}} id={{data.id}} onclick="clicked(event)" class="button">booked seat no. {{data.id}} {{data.booked}}</button></div>
+  
+  {% endif %}
+  
+  {% endfor %}
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                
+            </div>
+            <p id="seat" value="none"></p>
+            <div class="modal-body">
+            	<p>enter your name</p>
+                <input type="text" name="name">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="confirm()" data-dismiss="modal">confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

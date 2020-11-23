@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Signup</title>
+</head>
+<body>
+	<h1>Signup</h1>
+ 
+
+<form method="post" >
+	 {{ form.hidden_tag() }}
+
+
+	{% for field, errors in form.errors.items() %}
+<div class="alert alert-error">
+    {{ form[field].label }}: {{ ', '.join(errors) }}
+</div>
+{% endfor %}
+
+
+    <tr>
+        <th>{{ form.email.label }} {% if form.email.flags.required %}*{% endif %}</th><br>
+        <td>{{ form.email }}</td>
+
+    </tr>
+     <tr>
+        <th>{{ form.password.label }} {% if form.password.flags.required %}*{% endif %}</th><br>
+        <td>{{ form.password }}</td>
+    </tr>
+
+
+<button type="submit">Login</button>
+
+<form>
+	<a href="{{ url_for('login') }}">click here to login</a>
+</body>
+</html>
